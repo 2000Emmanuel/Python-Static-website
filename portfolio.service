@@ -1,0 +1,15 @@
+[Unit]
+Description=Gunicorn instance to serve Portfolio Django App
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/home/ubuntu/portfolio_website
+Environment="PATH=/home/ubuntu/portfolio_website/venv/bin"
+ExecStart=/home/ubuntu/portfolio_website/venv/bin/gunicorn --config gunicorn.conf.py portfolio.wsgi:application
+ExecReload=/bin/kill -s HUP $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

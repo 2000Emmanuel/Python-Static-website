@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ project.title }} - Portfolio{% endblock %}
+
+{% block content %}
+<!-- Project Header -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'projects' %}">Projects</a></li>
+                        <li class="breadcrumb-item active">{{ project.title }}</li>
+                    </ol>
+                </nav>
+                
+                <h1 class="display-5 fw-bold mb-3">
+                    {{ project.title }}
+                    {% if project.featured %}
+                    <span class="badge bg-warning text-dark ms-2">Featured</span>
+                    {% endif %}
+                </h1>
+                
+                <div class="d-flex gap-3 mb-4">
+                    {% if project.github_url %}
+                    <a href="{{ project.github_url }}" class="btn btn-dark" target="_blank">
+                        <i class="fab fa-github"></i> View Code
+                    </a>
+                    {% endif %}
+                    {% if project.live_url %}
+                    <a href="{{ project.live_url }}" class="btn btn-success" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Live Demo
+                    </a>
+                    {% endif %}
+                </div>
+                
+                <p class="text-muted">
+                    <i class="fas fa-calendar"></i> Created on {{ project.created_date|date:"F d, Y" }}
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Project Content -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Project Image -->
+                {% if project.image %}
+                <div class="mb-5">
+                    <img src="{{ project.image.url }}" class="img-fluid rounded shadow" alt="{{ project.title }}">
+                </div>
+                {% endif %}
+                
+                <!-- Project Description -->
+                <div class="mb-5">
+                    <h2 class="h3 mb-4">Project Overview</h2>
+                    <div class="project-description">
+                        {{ project.description|linebreaks }}
+                    </div>
+                </div>
+                
+                <!-- Technologies Used -->
+                <div class="mb-5">
+                    <h2 class="h3 mb-4">Technologies Used</h2>
+                    <div class="row">
+                        {% for tech in project.get_technologies_list %}
+                        <div class="col-auto mb-2">
+                            <span class="badge bg-primary fs-6 px-3 py-2">{{ tech }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Project Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <strong>Project Type:</strong>
+                            <p class="mb-0">Web Application</p>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <strong>Created:</strong>
+                            <p class="mb-0">{{ project.created_date|date:"F Y" }}</p>
+                        </div>
+                        
+                        {% if project.github_url or project.live_url %}
+                        <div class="mb-3">
+                            <strong>Links:</strong>
+                            <div class="d-flex flex-column gap-2">
+                                {% if project.github_url %}
+                                <a href="{{ project.github_url }}" class="btn btn-outline-dark btn-sm" target="_blank">
+                                    <i class="fab fa-github"></i> Source Code
+                                </a>
+                                {% endif %}
+                                {% if project.live_url %}
+                                <a href="{{ project.live_url }}" class="btn btn-outline-success btn-sm" target="_blank">
+                                    <i class="fas fa-external-link-alt"></i> Live Demo
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="mb-3">
+                            <strong>Status:</strong>
+                            <span class="badge bg-success">Completed</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Contact CTA -->
+                <div class="card shadow-sm mt-4">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Interested in Similar Work?</h5>
+                        <p class="card-text">Let's discuss your project requirements.</p>
+                        <a href="{% url 'contact' %}" class="btn btn-primary">Get In Touch</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Navigation to Other Projects -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Other Projects</h2>
+        <div class="text-center">
+            <a href="{% url 'projects' %}" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i> View All Projects
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

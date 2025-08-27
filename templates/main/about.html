@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About - Portfolio{% endblock %}
+
+{% block content %}
+<!-- About Hero Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-5 fw-bold mb-4">About Me</h1>
+                <p class="lead">
+                    I'm a passionate full-stack developer with experience in building scalable web applications. 
+                    I love solving complex problems and creating user-friendly solutions.
+                </p>
+                <p>
+                    With a strong foundation in both frontend and backend technologies, I enjoy working on 
+                    projects that challenge me to learn new skills and push the boundaries of what's possible.
+                </p>
+            </div>
+            <div class="col-lg-6 text-center">
+                <img src="{% static 'images/Tokyo.png' %}" alt="About Me" class="img-fluid about-image shadow">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Skills Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Technical Skills</h2>
+        {% regroup skills by category as skill_groups %}
+        <div class="row">
+            {% for group in skill_groups %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">{{ group.grouper }}</h5>
+                    </div>
+                    <div class="card-body">
+                        {% for skill in group.list %}
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between">
+                                <span>{{ skill.name }}</span>
+                                <span>{{ skill.proficiency }}%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" 
+                                     style="width: {{ skill.proficiency }}%" 
+                                     aria-valuenow="{{ skill.proficiency }}" 
+                                     aria-valuemin="0" aria-valuemax="100">
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">No skills added yet. Add some through the admin panel.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Experience Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Work Experience</h2>
+        <div class="row">
+            {% for experience in experiences %}
+            <div class="col-12 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h5 class="text-primary">{{ experience.company }}</h5>
+                                <p class="text-muted">
+                                    {{ experience.start_date|date:"M Y" }} - 
+                                    {% if experience.end_date %}
+                                        {{ experience.end_date|date:"M Y" }}
+                                    {% else %}
+                                        Present
+                                    {% endif %}
+                                </p>
+                                {% if experience.location %}
+                                <p class="text-muted"><i class="fas fa-map-marker-alt"></i> {{ experience.location }}</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-9">
+                                <h4>{{ experience.position }}</h4>
+                                <p>{{ experience.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">No work experience added yet. Add some through the admin panel.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Education Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Education</h2>
+        <div class="row">
+            {% for edu in education %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">{{ edu.institution }}</h5>
+                        <h6 class="card-subtitle mb-2">{{ edu.degree }}</h6>
+                        <p class="text-muted">{{ edu.field_of_study }}</p>
+                        <p class="text-muted">
+                            {{ edu.start_date|date:"Y" }} - 
+                            {% if edu.end_date %}
+                                {{ edu.end_date|date:"Y" }}
+                            {% else %}
+                                Present
+                            {% endif %}
+                        </p>
+                        {% if edu.gpa %}
+                        <p><strong>GPA:</strong> {{ edu.gpa }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">No education information added yet. Add some through the admin panel.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="mb-4">Let's Work Together</h2>
+        <p class="lead mb-4">I'm always interested in new opportunities and exciting projects.</p>
+        <a href="{% url 'contact' %}" class="btn btn-warning btn-lg">Get In Touch</a>
+    </div>
+</section>
+{% endblock %}

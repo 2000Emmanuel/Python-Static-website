@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Projects - Portfolio{% endblock %}
+
+{% block content %}
+<!-- Projects Header -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-4 fw-bold mb-4">My Projects</h1>
+                <p class="lead">
+                    Here's a collection of projects I've worked on, showcasing different technologies and skills.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Projects Grid -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            {% for project in projects %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {% if project.image %}
+                    <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}" style="height: 250px; object-fit: cover;">
+                    {% else %}
+                    <!-- Use a placeholder image based on project ID -->
+                    <img src="{% static 'images/project'|add:project.id|add:'.jpg' %}" class="card-img-top" alt="{{ project.title }}" style="height: 250px; object-fit: cover;" onerror="this.onerror=null; this.src='{% static 'images/project1.jpg' %}';">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">
+                            {{ project.title }}
+                            {% if project.featured %}
+                            <span class="badge bg-warning text-dark ms-2">Featured</span>
+                            {% endif %}
+                        </h5>
+                        <p class="card-text flex-grow-1">{{ project.description|truncatewords:25 }}</p>
+                        
+                        <!-- Technologies -->
+                        <div class="mb-3">
+                            <h6 class="text-muted">Technologies:</h6>
+                            {% for tech in project.get_technologies_list %}
+                            <span class="badge bg-secondary me-1 mb-1">{{ tech }}</span>
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="d-flex gap-2 mt-auto">
+                            <a href="{% url 'project_detail' project.pk %}" class="btn btn-primary btn-sm flex-fill">
+                                <i class="fas fa-eye"></i> View Details
+                            </a>
+                            {% if project.github_url %}
+                            <a href="{{ project.github_url }}" class="btn btn-outline-dark btn-sm" target="_blank" title="View Code">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            {% endif %}
+                            {% if project.live_url %}
+                            <a href="{{ project.live_url }}" class="btn btn-outline-success btn-sm" target="_blank" title="Live Demo">
+                                <i class="fas fa-external-link-alt"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <small><i class="fas fa-calendar"></i> {{ project.created_date|date:"M d, Y" }}</small>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <i class="fas fa-folder-open fa-4x text-muted mb-4"></i>
+                    <h3 class="text-muted">No Projects Yet</h3>
+                    <p class="text-muted">Projects will appear here once they're added through the admin panel.</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+{% if projects %}
+<section class="py-5 bg-light">
+    <div class="container text-center">
+        <h2 class="mb-4">Interested in Working Together?</h2>
+        <p class="lead mb-4">I'm always open to discussing new opportunities and exciting projects.</p>
+        <a href="{% url 'contact' %}" class="btn btn-primary btn-lg">Let's Talk</a>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
