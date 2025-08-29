@@ -16,7 +16,7 @@ echo "Installing system dependencies..."
 sudo apt install -y python3 python3-pip python3-venv nginx supervisor git
 
 # Create application directory
-APP_DIR="/home/ubuntu/portfolio_website"
+APP_DIR="/home/ubuntu/Python-Static-website"
 echo "Setting up application directory: $APP_DIR"
 
 # Create necessary directories
@@ -26,7 +26,7 @@ sudo mkdir -p /var/run/gunicorn
 # Set up virtual environment
 echo "Setting up Python virtual environment..."
 cd $APP_DIR
-python3 -m venv venv
+python3 -m venv emma-venv
 source venv/bin/activate
 
 # Install Python dependencies
@@ -46,14 +46,14 @@ python manage.py migrate
 
 # Create superuser (optional - you can do this manually later)
 # echo "Creating Django superuser..."
-# echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'your-secure-password')" | python manage.py shell
+echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', '07061246263')" | python manage.py shell
 
 # Set up Gunicorn service
 echo "Setting up Gunicorn service..."
 sudo cp portfolio.service /etc/systemd/system/
-sudo systemctl daemon-reload
+sudo systemctl daemon-reload 
 sudo systemctl enable portfolio
-sudo systemctl start portfolio
+
 
 # Set up Nginx
 echo "Setting up Nginx..."

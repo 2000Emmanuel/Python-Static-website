@@ -1,15 +1,22 @@
+# /etc/systemd/system/portfolio.service
 [Unit]
-Description=Gunicorn instance to serve Portfolio Django App
+Description=Gunicorn service for Django project (Python_Static_website)
 After=network.target
 
 [Service]
-User=www-data
+User=ubuntu
 Group=www-data
-WorkingDirectory=/home/ubuntu/portfolio_website
-Environment="PATH=/home/ubuntu/portfolio_website/venv/bin"
-ExecStart=/home/ubuntu/portfolio_website/venv/bin/gunicorn --config gunicorn.conf.py portfolio.wsgi:application
-ExecReload=/bin/kill -s HUP $MAINPID
-Restart=on-failure
+WorkingDirectory=/home/ubuntu/Python_Static_website
+ExecStart=/home/ubuntu/Python_Static_website/venv/bin/gunicorn \
+          --config /home/ubuntu/Python_Static_website/gunicorn.conf.py \
+          Python_Static_website.wsgi:application
+
+Restart=always
+RestartSec=5
+
+# Logging
+StandardOutput=journal
+StandardError=journal
 
 [Install]
 WantedBy=multi-user.target

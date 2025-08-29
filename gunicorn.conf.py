@@ -1,35 +1,27 @@
-# Gunicorn configuration file
+# /home/ubuntu/Python-Static-website/gunicorn.conf.py
 
-# Server socket
-bind = "0.0.0.0:8000"
-backlog = 2048
+import multiprocessing
+
+# Bind to a Unix socket for Nginx <-> Gunicorn communication
+bind = "unix:/home/ubuntu/Python_Static_website/gunicorn.sock"
 
 # Worker processes
-workers = 3
+workers = multiprocessing.cpu_count() * 2 + 1
 worker_class = "sync"
-worker_connections = 1000
-timeout = 30
-keepalive = 2
+threads = 2
 
-# Restart workers after this many requests, to help prevent memory leaks
-max_requests = 1000
-max_requests_jitter = 100
+# App settings
+chdir = "/home/ubuntu/Python_Static_website"
+wsgi_app = "Python_Static_website.wsgi:application"  # Django WSGI entry point
 
 # Logging
-accesslog = "/var/log/gunicorn/access.log"
-errorlog = "/var/log/gunicorn/error.log"
+accesslog = "/home/ubuntu/Python_Static_website/logs/gunicorn-access.log"
+errorlog = "/home/ubuntu/Python_Static_website/logs/gunicorn-error.log"
 loglevel = "info"
 
-# Process naming
-proc_name = "portfolio_gunicorn"
-
-# Server mechanics
+# Daemonization (let systemd handle this, so keep False)
 daemon = False
-pidfile = "/var/run/gunicorn/portfolio.pid"
-user = "www-data"
-group = "www-data"
-tmp_upload_dir = None
 
-# SSL (if needed)
-# keyfile = "/path/to/keyfile"
-# certfile = "/path/to/certfile"
+# Security limits
+limit_request_line = 4094
+limit_request_fields = 100
